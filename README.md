@@ -1,4 +1,3 @@
-Here's a template you can use for the README.md file for your Airbnb clone project:
 Airbnb Clone Project
 
 This project is an Airbnb clone implemented as part of the ALX and Holberton curriculum. It aims to replicate some of the core functionalities of Airbnb, such as listing properties, booking accommodations, user authentication, and reviews.
