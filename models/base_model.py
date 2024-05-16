@@ -10,23 +10,27 @@ import uuid
 class BaseModel:
     """Super-class from which future classes will be derived"""
     def __init__(self):
+        """Initialize BaseModel"""
         self.id = str(uuid.uuid4())
         self.created_at = datetime.utcnow()
         self.updated_at = self.created_at
 
     def __str__(self):
+        """Return the str representation of the BaseModel Instance"""
         class_name = self.__class__.__name__
         return "[{}] ({}) {}".format(self.__class__.__name__,
                                      self.id, self.__dict__)
 
     def to_dict(self):
+        """Return the dictinary of the BaseModel instance"""
         inst_dict = self.__dict__.copy()
-        inst_dict["__class__"] = self.__class.__name__
+        inst_dict["__class__"] = self.__class__.__name__
         inst_dict["created_at"] = self.created_at.isoformat()
         inst_dict["updated_at"] = self.updated_at.isoformat()
         return inst_dict
 
     def save(self):
+        """Update updateed_at with current datetime"""
         self.updated_at = datetime.utcnow()
 
 
