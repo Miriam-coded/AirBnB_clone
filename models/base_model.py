@@ -3,17 +3,34 @@
 contains BaseModel class
 """
 
+import models
 from datetime import datetime
-import uuid
+from uuid import uuid4
+
 
 
 class BaseModel:
     """Super-class from which future classes will be derived"""
-    def __init__(self):
-        """Initialize BaseModel"""
-        self.id = str(uuid.uuid4())
+    def __init__(self, *args, **kwargs):
+        """Initialize BaseModel instance
+
+        Args:
+            *args (any): Unused
+            **kwargs (dict): key/value pairs of attributes
+        """
+        tformat = "%Y-%m-%dT%H:%M:%S:%f"
+        self.id = str(uuid4())
         self.created_at = datetime.utcnow()
         self.updated_at = self.created_at
+
+        if len(kwargs) != 0:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    self.__dict__[key] = datetime.strptime(value, tformat)
+                else:
+                    self.__dict__[key] = value
+        else:
+            models.storage.new(self)
 
     def __str__(self):
         """Return the str representation of the BaseModel Instance"""
@@ -32,18 +49,4 @@ class BaseModel:
     def save(self):
         """Update updateed_at with current datetime"""
         self.updated_at = datetime.utcnow()
-
-
-if __name__ == '__main__':
-    my_model = BaseModel()
-    my_model.name = "My First Model"
-    my_model.my_number = 89
-    print(my_model)
-    my_model.save()
-    print(my_model)
-    my_model_json = my_model.to_dict()
-    print(my_model_json)
-    print("JSON of my_model:")
-    for key in my_model_json.keys():
-        print("\t{}: ({}) - {}".format(key,
-              type(my_model_json[key]), my_model_json[key]))
+        models.storage.save()
