@@ -4,7 +4,6 @@ contains BaseModel class
 """
 
 
-from models import storage
 from datetime import datetime
 from uuid import uuid4
 
@@ -32,7 +31,7 @@ class BaseModel:
             current_time = datetime.utcnow()
             self.created_at = current_time
             self.updated_at = current_time
-            models.storage.new(self)
+            self._import_storage().new(self)
 
     def __str__(self):
         """Return the str representation of the BaseModel Instance"""
@@ -51,4 +50,11 @@ class BaseModel:
     def save(self):
         """Update updateed_at with current datetime"""
         self.updated_at = datetime.utcnow()
-        models.storage.save()
+        self._import_storage().save()
+
+    def _import_storage(self):
+        """Import storage method"""
+        from models import storage
+        return storage
+        
+
