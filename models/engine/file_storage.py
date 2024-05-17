@@ -1,15 +1,15 @@
 """
 File storage module
 """
-
-import json
 import os
+import json
+from models.base_model import BaseModel
 
 class FileStorage:
     """
 
     """
-    __file_path__ = "file.json"
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
@@ -24,7 +24,7 @@ class FileStorage:
         """
         obj_class_name = obj.__class__.__name__
         key = "{}.{}".format(obj_class_name, obj.id)
-        FileStorage.__objects_[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """
@@ -42,6 +42,8 @@ class FileStorage:
         """
 
         """
+
+        
         if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r", encoding = "utf-8") as file:
                 try:
@@ -55,5 +57,5 @@ class FileStorage:
 
                         FileStorage.__objects[key] = instance
 
-                except Exception:
+                except FileNotFoundError:
                     pass
