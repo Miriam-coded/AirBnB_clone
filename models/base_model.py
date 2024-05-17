@@ -3,7 +3,8 @@
 contains BaseModel class
 """
 
-import models
+
+from models import storage
 from datetime import datetime
 from uuid import uuid4
 
@@ -19,9 +20,6 @@ class BaseModel:
             **kwargs (dict): key/value pairs of attributes
         """
         tformat = "%Y-%m-%dT%H:%M:%S:%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.utcnow()
-        self.updated_at = self.created_at
 
         if len(kwargs) != 0:
             for key, value in kwargs.items():
@@ -30,6 +28,10 @@ class BaseModel:
                 else:
                     self.__dict__[key] = value
         else:
+            self.id = str(uuid4())
+            current_time = datetime.utcnow()
+            self.created_at = current_time
+            self.updated_at = current_time
             models.storage.new(self)
 
     def __str__(self):
