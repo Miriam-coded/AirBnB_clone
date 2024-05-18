@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 """
-
+console module for the project
 """
+
 import cmd
 
 
 class HBNBCommand(cmd.Cmd):
     """
-
+    HBNBCommand Class
     """
     prompt = "(hbnb)"
 
@@ -17,6 +18,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """EOF to exit the program"""
+        print()
         return True
 
     def emptyline(self):
