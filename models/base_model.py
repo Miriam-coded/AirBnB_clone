@@ -18,12 +18,12 @@ class BaseModel:
             *args (any): Unused
             **kwargs (dict): key/value pairs of attributes
         """
-        tformat = "%Y-%m-%dT%H:%M:%S:%f"
+        time_format = "%Y-%m-%dT%H:%M:%S.%f"
 
         if len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    self.__dict__[key] = datetime.strptime(value, tformat)
+                    self.__dict__[key] = datetime.strptime(value, time_format)
                 else:
                     self.__dict__[key] = value
         else:
@@ -40,7 +40,7 @@ class BaseModel:
                                      self.id, self.__dict__)
 
     def to_dict(self):
-        """Return the dictinary of the BaseModel instance"""
+        """Return the dictionary of the BaseModel instance"""
         inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = self.__class__.__name__
         inst_dict["created_at"] = self.created_at.isoformat()
@@ -48,7 +48,7 @@ class BaseModel:
         return inst_dict
 
     def save(self):
-        """Update updateed_at with current datetime"""
+        """Update updated_at with current datetime"""
         self.updated_at = datetime.utcnow()
         self._import_storage().save()
 

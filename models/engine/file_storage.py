@@ -42,8 +42,6 @@ class FileStorage:
         """
 
         """
-
-        
         if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r", encoding = "utf-8") as file:
                 try:
@@ -53,7 +51,7 @@ class FileStorage:
 
                         cls = eval(class_name)
 
-                        intance = cls(**value)
+                        instance = cls(**value)
 
                         FileStorage.__objects[key] = instance
 
