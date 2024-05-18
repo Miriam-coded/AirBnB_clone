@@ -2,9 +2,9 @@
 
 """
 
-import models
 import os
 import json
+import models
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
@@ -14,6 +14,7 @@ class TestFileStorageInst(unittest.TestCase):
     """
 
     """
+
     def test_file_inst_no_args(self):
         self.assertEqual(type(FileStorage()), FileStorage)
 
@@ -29,27 +30,29 @@ class TestFileStorage(unittest.TestCase):
 
     """
 
+    __file_path = "file.json"
+
     @classmethod
     def setUpClass(cls):
         try:
-            os.rename("file.json", "tmp.json")
+            os.remove("file.json")
         except FileNotFoundError:
             pass
-
+        try:
+            os.remove("tmp.json")
+        except FileNotFoundError:
+            pass
 
 
     @classmethod
     def tearDownClass(cls):
         try:
-            os.remove(cls.__file_path)
-        except FileNotFoundError:
-            pass
-        try:
             os.rename("tmp.json", "file.json")
         except FileNotFoundError:
-            pass
+          pass
 
     def setUp(self):
+        self.storage = FileStorage()
         self.model = BaseModel()
         self.model.name = "TestModel"
         self.model.save()
@@ -57,14 +60,13 @@ class TestFileStorage(unittest.TestCase):
 
     def tearDown(self):
         try:
-            os.remove(self.file_path)
+            os.remove(self.__file_path)
         except FileNotFoundError:
             pass
         FileStorage._FileStorage__objects = {}
 
     def test_file_path_exists(self):
-        self.file_path = FileStorage._FileStorage__file_path
-        self.assertIsInstance(os.path.exists(self.file_path), bool)
+        self.assertIsInstance(os.path.exists(self.__file_path), bool)
 
     def test_all(self):
         all_objects = models.storage.all()
@@ -81,14 +83,14 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         models.storage.save()
         key = f"BaseModel.{self.model.id}"
-        with open(self.file_path, 'r') as f:
+        with open(self.__file_path, 'r') as f:
             data = json.load(f)
         self.assertIn(key, data)
 
     def test_save_with_empty_objs(self):
         FileStorage._FileStorage__objects = {}
         models.storage.save()
-        with open(self.file_path, 'r') as f:
+        with open(self.__file_path, 'r') as f:
             data = json.load(f)
         self.assertEqual(data, {})
 
@@ -97,16 +99,16 @@ class TestFileStorage(unittest.TestCase):
         models.storage.save()
         FileStorage._FileStorage__objects = {}
         models.storage.reload()
-        self.assertIn(key, self.storage.all())
+        self.assertIn(key, models.storage.all())
 
     def test_reload_no_file(self):
         try:
-            os.remove(self.file_path)
+            os.remove(self.__file_path)
         except FileNotFoundError:
             pass
         FileStorage._FileStorage__objects = {}
         models.storage.reload()
-        self.assertEqual(self.storage.all(), {})
+        self.assertEqual(models.storage.all(), {})
 
 
 if __name__ == "__main__":
