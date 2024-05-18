@@ -1,16 +1,30 @@
-#!/usr/bin/python3
-from models import storage
+"""
+
+"""
+
+import models
+import os
+import unittest
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
-all_objs = storage.all()
-print("-- Reloaded objects --")
-for obj_id in all_objs.keys():
-    obj = all_objs[obj_id]
-    print(obj)
+class TestFileStorageInst(unittest.TestCase):
+    """
 
-print("-- Create a new object --")
-my_model = BaseModel()
-my_model.name = "My_First_Model"
-my_model.my_number = 89
-my_model.save()
-print(my_model)
+    """
+    def test_file_inst_no_args(self):
+        self.assertEqual(type(FileStorage()), FileStorage)
+
+    def test_file_inst_args(self):
+        with seld.assertRaises(TypeError):
+            FileStorage(None)
+
+    def test_stotage_init(self):
+        self.assertEqual(type(models.storage), FileStorage)
+
+class TestFileStorage(unittest.TestCase):
+    """
+
+    """
+
+    def setUp
