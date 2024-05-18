@@ -4,6 +4,9 @@ console module for the project
 """
 
 import cmd
+import models
+from models import storage
+from models.base_model import BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -29,8 +32,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Creates instance, saves and prints its id
         """
-        arg_split = arg.split()
-        if not arg:
+        arg_split = args.split()
+
+        if not args:
             print("** class name missing ***")
         else:
             try:
@@ -45,9 +49,9 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints string rep of an instance
         """
-        arg_split = arg.split()
+        arg_split = args.split()
 
-        if not arg:
+        if not args:
             print("** class name missing**")
         else:
             try:
@@ -66,13 +70,13 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(obj)
 
-    def do_destroy(self, arg):
+    def do_destroy(self, args):
         """
         Destroys instances based on class name and id
         """
-        arg_split = arg.split()
+        arg_split = args.split()
 
-        if not arg:
+        if not args:
             print("** class name missing **")
         else:
             try:
@@ -92,27 +96,28 @@ class HBNBCommand(cmd.Cmd):
                 del models.storage.all()[f"{class_name}.{instance_id}"]
                 models.storage.save()
 
-    def do_all(self, arg):
+    def do_all(self, args):
         """
         Prints all string rep of all instances
         """
+        arg_split = args.split()
         all_objects = models.storage.all().values()
         objects_list = []
         for obj in all_objects:
             objects_list.append(str(obj))
 
-        if arg and arg.split()[0] not in ["BaseModel"]:
+        if args and args.split()[0] not in ["BaseModel"]:
             print("** class doesn't exist **")
         else:
             print(objects_list)
 
-    def do_update(self, arg):
+    def do_update(self, args):
         """
         Updates instances based on class name and id
         """
-        arg_split = arg.split()
+        arg_split = args.split()
 
-        if not arg:
+        if not args:
             print("** class name missing **")
             return
 
