@@ -56,19 +56,18 @@ class HBNBCommand(cmd.Cmd):
         else:
             try:
                 class_name = arg_split[0]
-                instance_id = arg_split[1] if len(arg_split) > 1 else None
+                instance_id = arg_split[1]
             except IndexError:
                 print("** instance id missing**")
                 return
 
-            obj = models.storage.all().get(f"{class_name}.{instance_id}")
+            key = f"{class_name}.{instance_id}"
+            obj = models.storage.all().get(key)
 
-            if not class_name:
-                print("** class name missing**")
-            elif not obj:
+            if not obj:
                 print("** no instance found **")
-            else:
-                print(obj)
+                return
+            print(obj)
 
     def do_destroy(self, args):
         """
@@ -100,16 +99,19 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints all string rep of all instances
         """
-        arg_split = args.split()
-        all_objects = models.storage.all().values()
         objects_list = []
-        for obj in all_objects:
-            objects_list.append(str(obj))
-
-        if args and args.split()[0] not in ["BaseModel"]:
-            print("** class doesn't exist **")
+        if not args:
+            for obj in models.storage.all().values():
+                objects_list.append(str(obj))
         else:
-            print(objects_list)
+            arg_split = args.split()
+            if arg_split[0] not in ["BaseModel"]:
+                print("** class doesn't exist **")
+                return
+            for key, obj in models.storage.all().items():
+                if key.startswith(arg_split[0]):
+                    objects_list.append(str(obj))
+        print(objects_list)
 
     def do_update(self, args):
         """
@@ -123,14 +125,29 @@ class HBNBCommand(cmd.Cmd):
 
         try:
             class_name = arg_split[0]
-            instance_id = arg_split[1] if len(arg_split) > 1 else None
-            attr_name = arg_split[2] if len(arg_split) > 2 else None
-            attr_value = arg_split[3] if len(arg_split) > 3 else None
+            instance_id = arg_split[1]
+            attr_name = arg_split[2]
+            attr_value = arg_split[3]
         except IndexError:
             if len(arg_split) == 1:
-                print("** instance id missing**")
-            elif len(arg_split) <= 2:
-                print("** attribute name missing**")
+                print("** instance id missing **")
+            elif len(arg_split) == 2:
+                print("** attribute name missing **")
+            elif len(arg_split) == 3:
+                print("** value missing **")
+                return
+
+        key = f"{class_name}.{instance_id}"
+        obj = models.storage.all().get(key)
+        if not obj:
+            print("** no instance found **")
+            return
+        try:
+            attr_value = eval(attr_value)
+        except (NameError, SyntaxError):
+            pass
+        setattr(obj, attr_name, attr_value)
+        obj.save
 
 
 if __name__ == '__main__':
