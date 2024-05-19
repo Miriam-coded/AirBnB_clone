@@ -99,19 +99,14 @@ class HBNBCommand(cmd.Cmd):
         """
         Prints all string rep of all instances
         """
-        objects_list = []
-        if not args:
-            for obj in models.storage.all().values():
-                objects_list.append(str(obj))
+        arg_split = args.split()
+        objects = models.storage.all()
+        if not arg_split:
+            print([str(obj) for obj in objects.values()])
+        elif arg_split[0] in ["BaseModel"]:
+            print([str(obj) for obj in objects.values()])
         else:
-            arg_split = args.split()
-            if arg_split[0] not in ["BaseModel"]:
-                print("** class doesn't exist **")
-                return
-            for key, obj in models.storage.all().items():
-                if key.startswith(arg_split[0]):
-                    objects_list.append(str(obj))
-        print(objects_list)
+            print("** class doesn't exist **")
 
     def do_update(self, args):
         """
@@ -122,30 +117,26 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-
-        try:
-            class_name = arg_split[0]
-            instance_id = arg_split[1]
-            attr_name = arg_split[2]
-            attr_value = arg_split[3]
-        except IndexError:
-            if len(arg_split) == 1:
-                print("** instance id missing **")
-            elif len(arg_split) == 2:
-                print("** attribute name missing **")
-            elif len(arg_split) == 3:
-                print("** value missing **")
-                return
+        if len(arg_split) < 2:
+            print("** instace id missing **")
+            return
+        if len(arg_split) < 3:
+            print("** attribute name missing **")
+            return
+        if len(arg_split) < 4:
+            print("** value missing **")
+            return
+        class_name, instance_id = arg_split[0], arg_split[1]
+        attr_name, attr_value = arg_split[2], arg_split[3]
+        if class_name not in ["BaseModel"]:
+            print("** class doesn't exist **")
+            return
 
         key = f"{class_name}.{instance_id}"
         obj = models.storage.all().get(key)
         if not obj:
             print("** no instance found **")
             return
-        try:
-            attr_value = eval(attr_value)
-        except (NameError, SyntaxError):
-            pass
         setattr(obj, attr_name, attr_value)
         obj.save
 
