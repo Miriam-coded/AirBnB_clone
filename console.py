@@ -7,6 +7,7 @@ import cmd
 import models
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -35,12 +36,12 @@ class HBNBCommand(cmd.Cmd):
         arg_split = args.split()
 
         if not args:
-            print("** class name missing ***")
+            print("** class name missing **")
         else:
             try:
                 new_obj = eval(arg_split[0])()
             except NameError:
-                print("** class doesn't exist**")
+                print("** class doesn't exist **")
             else:
                 new_obj.save()
                 print(new_obj.id)
@@ -52,13 +53,13 @@ class HBNBCommand(cmd.Cmd):
         arg_split = args.split()
 
         if not args:
-            print("** class name missing**")
+            print("** class name missing **")
         else:
             try:
                 class_name = arg_split[0]
                 instance_id = arg_split[1]
             except IndexError:
-                print("** instance id missing**")
+                print("** instance id missing **")
                 return
 
             key = f"{class_name}.{instance_id}"
@@ -88,9 +89,9 @@ class HBNBCommand(cmd.Cmd):
             obj = models.storage.all().get(f"{class_name}.{instance_id}")
 
             if not class_name:
-                print("**class name missing **")
+                print("** class name missing **")
             elif not obj:
-                print("**no instance found **")
+                print("** no instance found **")
             else:
                 del models.storage.all()[f"{class_name}.{instance_id}"]
                 models.storage.save()
@@ -118,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         if len(arg_split) < 2:
-            print("** instace id missing **")
+            print("** instance id missing **")
             return
         if len(arg_split) < 3:
             print("** attribute name missing **")
@@ -128,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name, instance_id = arg_split[0], arg_split[1]
         attr_name, attr_value = arg_split[2], arg_split[3]
-        if class_name not in ["BaseModel"]:
+        if class_name not in ["BaseModel", "User"]:
             print("** class doesn't exist **")
             return
 
