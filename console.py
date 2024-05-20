@@ -66,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             obj = models.storage.all().get(key)
 
             if not obj:
-                print("** no instance found **")
+                print("** class doesn't exist **")
                 return
             print(obj)
 
