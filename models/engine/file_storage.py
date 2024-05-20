@@ -4,6 +4,7 @@ File storage module
 import os
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 class FileStorage:
     """
@@ -42,8 +43,6 @@ class FileStorage:
         """
 
         """
-
-        
         if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r", encoding = "utf-8") as file:
                 try:
@@ -53,9 +52,8 @@ class FileStorage:
 
                         cls = eval(class_name)
 
-                        intance = cls(**value)
+                        instance = cls(**value)
 
                         FileStorage.__objects[key] = instance
-
                 except FileNotFoundError:
                     pass
