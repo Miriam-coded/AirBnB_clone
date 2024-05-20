@@ -91,7 +91,10 @@ class HBNBCommand(cmd.Cmd):
             if not class_name:
                 print("** class name missing **")
             elif not obj:
-                print("** instance id missing **")
+                if len(arg_split) == 1:
+                    print("** class doesn't exist **")
+                else:
+                    print("** instance id missing **")
             else:
                 del models.storage.all()[f"{class_name}.{instance_id}"]
                 models.storage.save()
