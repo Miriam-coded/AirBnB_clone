@@ -66,7 +66,7 @@ class TestFileStorage(unittest.TestCase):
         FileStorage._FileStorage__objects = {}
 
     def test_file_path_exists(self):
-        self.assertIsInstance(os.path.exists(self.__file_path))
+        self.assertTrue(os.path.exists(self.__file_path))
 
     def test_all(self):
         all_objects = models.storage.all()

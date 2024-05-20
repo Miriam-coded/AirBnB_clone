@@ -51,10 +51,10 @@ class BaseModel:
         """Update updated_at with current datetime"""
         self.updated_at = datetime.utcnow()
         self._import_storage().save()
+        print("OK")
 
     def _import_storage(self):
         """Import storage method"""
         from models import storage
         return storage
-        
 
