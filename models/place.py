@@ -4,6 +4,7 @@ Place module
 
 from models.base_model import BaseModel
 
+
 class Place(BaseModel):
     city_id = ""
     user_id = ""
