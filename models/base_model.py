@@ -1,16 +1,12 @@
 #!/usr/bin/python3
-"""
-contains BaseModel class
-"""
-
-
+"""contains BaseModel class"""
 from datetime import datetime
 from uuid import uuid4
 
 
-
 class BaseModel:
     """Super-class from which future classes will be derived"""
+
     def __init__(self, *args, **kwargs):
         """Initialize BaseModel instance
 
@@ -56,5 +52,3 @@ class BaseModel:
         """Import storage method"""
         from models import storage
         return storage
-        
-

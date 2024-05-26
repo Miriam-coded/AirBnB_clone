@@ -8,6 +8,7 @@ from models.base_model import BaseModel
 from models import storage
 import os
 
+
 class TestUser(unittest.TestCase):
     """
     Test cases for the User class

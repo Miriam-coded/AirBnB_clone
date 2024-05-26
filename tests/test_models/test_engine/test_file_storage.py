@@ -1,7 +1,7 @@
+#!/usr/bin/python3
 """
 
 """
-
 import os
 import json
 import models
@@ -9,6 +9,7 @@ import unittest
 from datetime import datetime
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+
 
 class TestFileStorageInst(unittest.TestCase):
     """
@@ -24,6 +25,7 @@ class TestFileStorageInst(unittest.TestCase):
 
     def test_storage_init(self):
         self.assertEqual(type(models.storage), FileStorage)
+
 
 class TestFileStorage(unittest.TestCase):
     """
@@ -43,13 +45,12 @@ class TestFileStorage(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-
     @classmethod
     def tearDownClass(cls):
         try:
             os.rename("tmp.json", "file.json")
         except FileNotFoundError:
-          pass
+            pass
 
     def setUp(self):
         self.storage = FileStorage()
@@ -66,7 +67,7 @@ class TestFileStorage(unittest.TestCase):
         FileStorage._FileStorage__objects = {}
 
     def test_file_path_exists(self):
-        self.assertIsInstance(os.path.exists(self.__file_path))
+        self.assertTrue(os.path.exists(self.__file_path))
 
     def test_all(self):
         all_objects = models.storage.all()
