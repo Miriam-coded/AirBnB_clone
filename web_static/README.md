@@ -1,0 +1,1 @@
+Web static front end to begin with... html and css
